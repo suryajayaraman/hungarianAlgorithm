@@ -1,40 +1,57 @@
 #ifndef _HUNGARIAN_H_
 #define _HUNGARIAN_H_
 
-#include<vector>
-#include<stdint.h>
-#include<iostream>
-#include "hungarianAlgorithm/utils.h"
+#include <iostream>
+#include "eigen3/Eigen/Dense"
 
 
-typedef std::vector<double> vecXd;
-typedef std::vector<std::vector<double>> matXd;
+typedef Eigen::VectorXd  vecXd;
+typedef Eigen::MatrixXd matXd;
+typedef Eigen::Matrix<bool,-1, 1> vecXbool;
+typedef Eigen::Matrix<bool,-1,-1> matXbool;
 
 
 class hungarian
 {
     public:
-        hungarian(void);
-        ~hungarian(void);
+        hungarian() {};
+        ~hungarian() {};
 
-        static std::vector<uint16_t> solve(const matXd costMtx);
+        Eigen::VectorXi solve(const matXd &costMtx, double *cost);
 
     private:
-        /**
-         * @brief function does row min subtraction - step1 of hungarian algorithm
-         * @param costMtx input Matrix
-         * @return NA
-         */
-        static void step1(matXd &costMtx);
+        void assignmentOptimal(const matXd &costMtx, 
+                               Eigen::VectorXi &optimalAssgnVec, 
+                               double* costHandle);
+        
+        void buildAssignmentVec(matXbool &starMtx, vecXbool &coveredCols,
+                    Eigen::VectorXi &optimalAssgnVec);
 
+        void step2a(matXd &costMtx, matXbool &starMtx,
+                    matXbool &newStarMtx, matXbool &primeMtx,
+                    vecXbool &coveredCols, vecXbool &coveredRows,
+                    Eigen::VectorXi &optimalAssgnVec);
 
-        /**
-         * @brief function does column min subtraction - step2 of hungarian algorithm
-         * @param costMtx input Matrix
-         * @return NA
-         */
-        static void step2(matXd &costMtx);
+        void step2b(matXd &costMtx, matXbool &starMtx,
+                    matXbool &newStarMtx, matXbool &primeMtx,        
+                    vecXbool &coveredCols, vecXbool &coveredRows,
+                    Eigen::VectorXi &optimalAssgnVec);
+        
+        void step3(matXd &costMtx, matXbool &starMtx,
+                   matXbool &newStarMtx, matXbool &primeMtx,        
+                   vecXbool &coveredCols, vecXbool &coveredRows,
+                   Eigen::VectorXi &optimalAssgnVec);
 
+        void step4(matXd &costMtx, matXbool &starMtx,
+                   matXbool &newStarMtx, matXbool &primeMtx,        
+                   vecXbool &coveredCols, vecXbool &coveredRows,
+                   Eigen::VectorXi &optimalAssgnVec,
+                   const int &starRow, const int &starCol);
+
+        void step5(matXd &costMtx, matXbool &starMtx,
+                   matXbool &newStarMtx, matXbool &primeMtx,        
+                   vecXbool &coveredCols, vecXbool &coveredRows,
+                   Eigen::VectorXi &optimalAssgnVec);
 };
 
 
