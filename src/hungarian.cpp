@@ -180,28 +180,37 @@ void hungarian::step3(matXd &costMtx, matXbool &starMtx,
 void hungarian::step4(matXd &costMtx, matXbool &starMtx,
            matXbool &primeMtx, vecXbool &coveredCols, 
            vecXbool &coveredRows, Eigen::VectorXi &optimalAssgnVec,
-           const int &starRow, const int &starCol)
+           const int &row, const int &col)
 {
     // create a copy of the existing star matrix and
     // star the found zero
     matXbool newStarMtx {starMtx};
-    newStarMtx(starRow, starCol) = true;
+    newStarMtx(row, col) = true;
 
     // find previous starred zero in current column
-    int previousStarRow = 0;
-    for(; previousStarRow < starMtx.rows(); previousStarRow++)
-        if(starMtx(previousStarRow, starCol) == true)
+    int starRow, starCol, primeRow, primeCol;
+    starCol = col;
+    for(starRow =0; starRow < starMtx.rows(); starRow++)
+        if(starMtx(starRow, starCol) == true)
             break;
     
-    // unstar old zero in newStarMtx
-    newStarMtx(previousStarRow, starCol) = false;
+    while(starRow < starMtx.rows())
+    {
+        // unstar old starred zero in newStarMtx
+        newStarMtx(starRow, starCol) = false;
 
-    // find zero of previousStarRow in primMtx
-    int primeZeroCol = 0;
-    for(; primeZeroCol < primeMtx.cols(); primeZeroCol++)
-        if(primeMtx(previousStarRow, primeZeroCol) == true)
-            break;
-    newStarMtx(previousStarRow, primeZeroCol) = true;
+        // find zero of previousStarRow in primMtx
+        primeRow = starRow;
+        for(primeCol =0; primeCol < primeMtx.cols(); primeCol++)
+            if(primeMtx(primeRow, primeCol) == true)
+                break;
+        newStarMtx(primeRow, primeCol) = true;
+
+        starCol = primeCol;
+        for(starRow =0; starRow < starMtx.rows(); starRow++)
+            if(starMtx(starRow, starCol) == true)
+                break;        
+    }
 
     // reassign new star matrix to old matrix
     // reset prime matrix and covered rows
@@ -229,15 +238,15 @@ void hungarian::step5(matXd &costMtx, matXbool &starMtx,
                     if(costMtx(row,col) < minValue)
                         minValue = costMtx(row,col);
 
-    // subtract minValue from uncovered columns
-    for(int col=0; col < costMtx.cols(); col++)
-        if(coveredCols(col) == false)
-            costMtx.col(col).array() -= minValue;
-
     // add minValue to covered rows
     for(int row=0; row < costMtx.rows(); row++)
         if(coveredRows(row) == true)
             costMtx.row(row).array() += minValue;
+
+    // subtract minValue from uncovered columns
+    for(int col=0; col < costMtx.cols(); col++)
+        if(coveredCols(col) == false)
+            costMtx.col(col).array() -= minValue;
 
     // try covering all zeros on reconstructed matrix
     step3(costMtx, starMtx, primeMtx, coveredCols, coveredRows, optimalAssgnVec);

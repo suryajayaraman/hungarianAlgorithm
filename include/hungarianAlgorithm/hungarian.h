@@ -2,17 +2,16 @@
  * @file hungarian.h
  * @author J Surya (suryajayaraman97@gmail.com)
  * @brief File contains Hungarian algorithm implementation. The
- * work is majorly a copy of the following amazing  repo :
+ * work is majorly a copy of the following amazing repo :
  * https://github.com/mcximing/hungarian-algorithm-cpp
  * 
  * CHANGES FROM REFERENCE
  * 1. Implemented using `Eigen` library for Array operations
  * 2. Added docstring and comments for better understanding
+ * 
  * @version 0.1
  * @date 2022-04-22
- * 
  * @copyright Copyright (c) 2022
- * 
  */
 #ifndef _HUNGARIAN_H_
 #define _HUNGARIAN_H_
@@ -175,11 +174,51 @@ class hungarian
                    matXbool &primeMtx, vecXbool &coveredCols, 
                    vecXbool &coveredRows, Eigen::VectorXi &optimalAssgnVec);
 
+
+        /**
+         * @brief Function replaces the starMatrix using entries in 
+         * primeMatrix. i.e entries which were primed are set to true
+         * and previous entry in corresponding row / column in unstarred
+         * This matrix is used as the new star matrix based on which we 
+         * try modify coveredCols (step 2a) and try making assignments (step 2b)
+         * 
+         * @param costMtx input cost matrix where c_ij indicates cost associated 
+         * with ith row and jth column 
+         * @param starMtx optimal assignment matrix as boolean 
+         * @param primeMtx 
+         * @param coveredCols boolean vector indicating if a column is covered / not
+         * @param coveredRows boolean vector indicating if a row is covered / not
+         * @param optimalAssgnVec integer vector containing column index
+         * of optimal assignment for each row
+         * @param row row index of last primed zero
+         * @param col column index of last primed zero
+         * @return void
+         */
         void step4(matXd &costMtx, matXbool &starMtx,
                    matXbool &primeMtx, vecXbool &coveredCols, 
                    vecXbool &coveredRows, Eigen::VectorXi &optimalAssgnVec,
-                   const int &starRow, const int &starCol);
+                   const int &row, const int &col);
 
+
+        /**
+         * @brief Function reconstructs the cost matrix to find new zeros.
+         * It does so by:
+         * 1. Finding minimum uncovered value
+         * 2. Adding the value to covered rows
+         * 3. Subtracting value from uncovered columns
+         * 
+         * @param costMtx input cost matrix where c_ij indicates cost associated 
+         * with ith row and jth column 
+         * @param starMtx optimal assignment matrix as boolean 
+         * @param primeMtx 
+         * @param coveredCols boolean vector indicating if a column is covered / not
+         * @param coveredRows boolean vector indicating if a row is covered / not
+         * @param optimalAssgnVec integer vector containing column index
+         * of optimal assignment for each row
+         * @param row row index of last primed zero
+         * @param col column index of last primed zero
+         * @return void
+         */
         void step5(matXd &costMtx, matXbool &starMtx,
                    matXbool &primeMtx, vecXbool &coveredCols, 
                    vecXbool &coveredRows, Eigen::VectorXi &optimalAssgnVec);
