@@ -39,12 +39,13 @@ The code was developed on Ubuntu 20.04 LTS OS with
 
 
 ### How to run the project
-1. Clone the repo using git command:
-    `git clone https://github.com/suryajayaraman/hungarianAlgorithm.git`
-2. `cd /path/to/repo`
-3. Create build folder using `mkdir -p build && cd build`
-4. `cmake ..`
-5. `make`
+```
+$ git clone https://github.com/suryajayaraman/hungarianAlgorithm.git
+$ cd hungarianAlgorithm
+$ mkdir -p build && cd build
+$ cmake ..
+$ make
+```
 
 
 ### Applications of Hungarian algorithm
