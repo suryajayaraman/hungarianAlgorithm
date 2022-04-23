@@ -45,6 +45,7 @@ $ cd hungarianAlgorithm
 $ mkdir -p build && cd build
 $ cmake ..
 $ make
+$ ./HUNGARIAN_ALGORITHM
 ```
 
 
@@ -52,6 +53,8 @@ $ make
 
 - It is used for solving **Data association problem in Object Tracking Applications** as explained in this [blog post](https://www.thinkautonomous.ai/blog/?p=hungarian-algorithm)
 
+- In the following image, we need to associate the detections from Lidar to detections in camera. Essentially, hungarian
+algorithm can be used to associate data from different sensors, so as to fuse them to get better estimations
 
 ![](images/usecase.png)
 [Image reference](https://www.thinkautonomous.ai/blog/?p=hungarian-algorithm)
