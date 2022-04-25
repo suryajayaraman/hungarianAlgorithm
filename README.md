@@ -73,3 +73,5 @@ algorithm can be used to associate data from different sensors, so as to fuse th
 - [Python implementation](https://python.plainenglish.io/hungarian-algorithm-introduction-python-implementation-93e7c0890e15)
 - [C implementation with explanation](https://brc2.com/the-algorithm-workshop/)
 - [c++ implementation](https://github.com/saebyn/munkres-cpp)
+- [Comparison of assignment problem implementation](https://github.com/Yay295/AssignmentProblemComparison)
+- [cpp best practices](https://github.com/Gluttton/cppbestpractices/blob/master/04-Considering_Safety.md)
